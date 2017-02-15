@@ -17,12 +17,18 @@ window.onload = function () {
     name.y = 70;
     name.text = "Jasper";
     name.color = "#000000";
-    name.size = 50;
+    name.size = 100;
     name.alpha = 0.2;
     var shape = new Shape();
     shape.graphics.beginFill("#000000");
+    shape.graphics.moveTo(200, 200);
+    shape.graphics.lineTo(100, 100);
+    shape.graphics.lineTo(0, 200);
     shape.graphics.drawCircle(30, 30, 30);
     shape.graphics.drawRect(50, 50, 100, 50);
+    shape.graphics.moveTo(0, 0);
+    shape.graphics.lineTo(100, 100);
+    shape.graphics.lineTo(200, 0);
     shape.graphics.endFill();
     /*
         var rect = new Shape();
@@ -110,6 +116,9 @@ var Shape = (function (_super) {
             context2D.globalAlpha = info.alpha;
             switch (info.type) {
                 case ShapeType.LINE:
+                    context2D.moveTo(info.x, info.y);
+                    context2D.lineTo(info.endx, info.endy);
+                    context2D.stroke();
                     break;
                 case ShapeType.RECT:
                     context2D.fillRect(info.x, info.y, info.width, info.height);
@@ -147,6 +156,13 @@ var Graphics = (function () {
         this.shapeInfo.push(new RectInfo(x, y, width, height));
     };
     Graphics.prototype.lineTo = function (x, y) {
+        this.shapeInfo.push(new LineInfo(this._x, this._y, x, y));
+        this._x = x;
+        this._y = y;
+    };
+    Graphics.prototype.moveTo = function (x, y) {
+        this._x = x;
+        this._y = y;
     };
     return Graphics;
 }());
@@ -181,9 +197,13 @@ var RectInfo = (function (_super) {
 }(ShapeInfo));
 var LineInfo = (function (_super) {
     __extends(LineInfo, _super);
-    function LineInfo() {
-        _super.apply(this, arguments);
+    function LineInfo(_x, _y, x, y) {
+        _super.call(this);
         this.type = ShapeType.LINE;
+        this.x = _x;
+        this.y = _y;
+        this.endx = x;
+        this.endy = y;
     }
     return LineInfo;
 }(ShapeInfo));

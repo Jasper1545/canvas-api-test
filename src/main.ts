@@ -20,13 +20,23 @@ window.onload = () => {
     name.y = 70;
     name.text = "Jasper";
     name.color = "#000000";
-    name.size = 50;
+    name.size = 100;
     name.alpha = 0.2;
 
     var shape = new Shape();
     shape.graphics.beginFill("#000000");
+
+    shape.graphics.moveTo(200,200);
+    shape.graphics.lineTo(100,100);
+    shape.graphics.lineTo(0,200);
+
     shape.graphics.drawCircle(30,30,30);
     shape.graphics.drawRect(50,50,100,50);
+
+    shape.graphics.moveTo(0,0);
+    shape.graphics.lineTo(100,100);
+    shape.graphics.lineTo(200,0);
+
     shape.graphics.endFill();
 
 /*
@@ -141,6 +151,9 @@ class Shape extends DisplayObject {
             switch(info.type) {
 
                 case ShapeType.LINE:
+                    context2D.moveTo(info.x,info.y);
+                    context2D.lineTo(info.endx,info.endy);
+                    context2D.stroke();
                     break;
 
                 case ShapeType.RECT:
@@ -174,6 +187,9 @@ var ShapeType = {
 
 class Graphics {
 
+    _x:number;
+    _y:number;
+
     color:string = "";
     shapeInfo:ShapeInfo[] = [];
 
@@ -196,7 +212,14 @@ class Graphics {
     }
 
     public lineTo(x:number,y:number) {
+        this.shapeInfo.push(new LineInfo(this._x,this._y,x,y));
+        this._x = x;
+        this._y = y;
+    }
 
+    public moveTo(x:number,y:number) {
+        this._x = x;
+        this._y = y;
     }
 
 
@@ -206,10 +229,14 @@ class ShapeInfo {
     type:number;
     x:number;
     y:number;
+    alpha:number = 1;
+    
     radius:number;
     width:number;
     height:number;
-    alpha:number = 1;
+       
+    endx:number;
+    endy:number;
 }
 
 class CircleInfo extends ShapeInfo {
@@ -240,6 +267,15 @@ class RectInfo extends ShapeInfo {
 
 class LineInfo extends ShapeInfo {
     type = ShapeType.LINE;
+
+    public constructor(_x:number,_y:number,x:number,y:number) {
+        super();
+        this.x = _x;
+        this.y = _y;
+        this.endx = x;
+        this.endy = y;
+      
+    }
  
 }
 
