@@ -19,8 +19,10 @@ window.onload = () => {
     name.x = 70;
     name.y = 70;
     name.text = "Jasper";
-    name.color = "#FFFFCC";
+    name.color = "#000000";
     name.size = 50;
+    name.alpha = 0.2;
+    
     
     //图片
     var image = document.createElement("img");
@@ -32,6 +34,7 @@ window.onload = () => {
         avater.image = image;
         avater.width = 300;
         avater.height = 300;
+        avater.alpha = 0.8;
 
         stage.addChild(avater);
         stage.addChild(name);
@@ -39,18 +42,18 @@ window.onload = () => {
 
 }
 
-
-interface Drawable{
+interface Drawable {
     
     draw(context2D:CanvasRenderingContext2D);
 
 }
 
-class DisplayObject implements Drawable{
+class DisplayObject implements Drawable {
 
     x:number = 0;
     y:number = 0;
-    
+    alpha:number = 1;
+
     draw(context2D:CanvasRenderingContext2D) {
 
 
@@ -83,7 +86,7 @@ class Bitmap extends DisplayObject {
     height:number;
 
     draw(context2D:CanvasRenderingContext2D) {
-
+        context2D.globalAlpha = this.alpha;
         context2D.drawImage(this.image,this.x,this.y,this.width,this.height);
         
     }
@@ -98,6 +101,7 @@ class TextField extends DisplayObject {
 
     draw(context2D:CanvasRenderingContext2D) {
         
+        context2D.globalAlpha = this.alpha;
         context2D.fillStyle = this.color;
         context2D.font = this.size +"px" + " " + this.font;
         context2D.fillText(this.text,this.x,this.y);
