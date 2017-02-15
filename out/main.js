@@ -19,6 +19,17 @@ window.onload = function () {
     name.color = "#000000";
     name.size = 50;
     name.alpha = 0.2;
+    var shape = new Shape();
+    shape.graphics.beginFill("#000000");
+    shape.graphics.drawCircle(30, 30, 30);
+    shape.graphics.drawRect(50, 50, 100, 50);
+    shape.graphics.endFill();
+    /*
+        var rect = new Shape();
+        rect.graphics.beginFill("#000000");
+        rect.graphics.drawRect(50,50,100,50);
+        rect.graphics.endFill();
+    */
     //图片
     var image = document.createElement("img");
     image.src = "avater.jpg";
@@ -30,6 +41,7 @@ window.onload = function () {
         avater.alpha = 0.8;
         stage.addChild(avater);
         stage.addChild(name);
+        stage.addChild(shape);
     };
 };
 var DisplayObject = (function () {
@@ -85,4 +97,94 @@ var TextField = (function (_super) {
     };
     return TextField;
 }(DisplayObject));
+var Shape = (function (_super) {
+    __extends(Shape, _super);
+    function Shape() {
+        _super.call(this);
+        this.graphics = new Graphics();
+    }
+    Shape.prototype.draw = function (context2D) {
+        for (var _i = 0, _a = this.graphics.shapeInfo; _i < _a.length; _i++) {
+            var info = _a[_i];
+            context2D.fillStyle = this.graphics.color;
+            context2D.globalAlpha = info.alpha;
+            switch (info.type) {
+                case ShapeType.LINE:
+                    break;
+                case ShapeType.RECT:
+                    context2D.fillRect(info.x, info.y, info.width, info.height);
+                    break;
+                case ShapeType.CIRCLE:
+                    context2D.beginPath();
+                    context2D.arc(info.x, info.y, info.radius, 0, Math.PI * 2, true);
+                    context2D.closePath();
+                    context2D.fill();
+                    break;
+            }
+        }
+    };
+    return Shape;
+}(DisplayObject));
+var ShapeType = {
+    LINE: 0,
+    RECT: 1,
+    CIRCLE: 2
+};
+var Graphics = (function () {
+    function Graphics() {
+        this.color = "";
+        this.shapeInfo = [];
+    }
+    Graphics.prototype.beginFill = function (color) {
+        this.color = color;
+    };
+    Graphics.prototype.endFill = function () {
+    };
+    Graphics.prototype.drawCircle = function (x, y, radius) {
+        this.shapeInfo.push(new CircleInfo(x, y, radius));
+    };
+    Graphics.prototype.drawRect = function (x, y, width, height) {
+        this.shapeInfo.push(new RectInfo(x, y, width, height));
+    };
+    Graphics.prototype.lineTo = function (x, y) {
+    };
+    return Graphics;
+}());
+var ShapeInfo = (function () {
+    function ShapeInfo() {
+        this.alpha = 1;
+    }
+    return ShapeInfo;
+}());
+var CircleInfo = (function (_super) {
+    __extends(CircleInfo, _super);
+    function CircleInfo(x, y, radius) {
+        _super.call(this);
+        this.type = ShapeType.CIRCLE;
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+    }
+    return CircleInfo;
+}(ShapeInfo));
+var RectInfo = (function (_super) {
+    __extends(RectInfo, _super);
+    function RectInfo(x, y, width, height) {
+        _super.call(this);
+        this.type = ShapeType.RECT;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+    return RectInfo;
+}(ShapeInfo));
+var LineInfo = (function (_super) {
+    __extends(LineInfo, _super);
+    function LineInfo() {
+        _super.apply(this, arguments);
+        this.type = ShapeType.LINE;
+    }
+    return LineInfo;
+}(ShapeInfo));
 //# sourceMappingURL=main.js.map

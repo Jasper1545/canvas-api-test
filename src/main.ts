@@ -22,6 +22,19 @@ window.onload = () => {
     name.color = "#000000";
     name.size = 50;
     name.alpha = 0.2;
+
+    var shape = new Shape();
+    shape.graphics.beginFill("#000000");
+    shape.graphics.drawCircle(30,30,30);
+    shape.graphics.drawRect(50,50,100,50);
+    shape.graphics.endFill();
+
+/*
+    var rect = new Shape();
+    rect.graphics.beginFill("#000000");
+    rect.graphics.drawRect(50,50,100,50);
+    rect.graphics.endFill();
+*/
     
     
     //图片
@@ -38,6 +51,8 @@ window.onload = () => {
 
         stage.addChild(avater);
         stage.addChild(name);
+        stage.addChild(shape);
+
     }
 
 }
@@ -108,6 +123,127 @@ class TextField extends DisplayObject {
     }
 
 }
+
+class Shape extends DisplayObject {
+
+    graphics = new Graphics();
+    
+    public constructor() {
+        super();
+    }
+
+    draw(context2D:CanvasRenderingContext2D) {
+        
+        for(let info of this.graphics.shapeInfo){
+            context2D.fillStyle = this.graphics.color;
+            context2D.globalAlpha = info.alpha;
+
+            switch(info.type) {
+
+                case ShapeType.LINE:
+                    break;
+
+                case ShapeType.RECT:
+                    context2D.fillRect(info.x,info.y,info.width,info.height);
+                    break;
+                
+                case ShapeType.CIRCLE:
+                    context2D.beginPath();
+                    context2D.arc(info.x,info.y,info.radius,0,Math.PI*2,true);
+                    context2D.closePath();
+                    context2D.fill();
+                    break;
+
+            }
+        }
+        
+        
+    }
+
+    
+
+}
+
+var ShapeType = {
+
+    LINE:0,
+    RECT:1,
+    CIRCLE:2
+ 
+}
+
+class Graphics {
+
+    color:string = "";
+    shapeInfo:ShapeInfo[] = [];
+
+    public beginFill(color:string) {
+        this.color = color;
+    }
+
+    public endFill() {
+
+    }
+
+    public drawCircle(x:number,y:number,radius:number) {
+
+        this.shapeInfo.push(new CircleInfo(x,y,radius));
+    }
+
+    public drawRect(x:number,y:number,width:number,height:number) {
+
+        this.shapeInfo.push(new RectInfo(x,y,width,height));
+    }
+
+    public lineTo(x:number,y:number) {
+
+    }
+
+
+}
+
+class ShapeInfo {
+    type:number;
+    x:number;
+    y:number;
+    radius:number;
+    width:number;
+    height:number;
+    alpha:number = 1;
+}
+
+class CircleInfo extends ShapeInfo {
+    type = ShapeType.CIRCLE;
+
+    public constructor(x:number,y:number,radius:number) {
+        super();
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+    }
+
+}
+
+class RectInfo extends ShapeInfo {
+    type = ShapeType.RECT;
+
+    public constructor(x:number,y:number,width:number,height:number) {
+        super();
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+
+}
+
+class LineInfo extends ShapeInfo {
+    type = ShapeType.LINE;
+ 
+}
+
+
 
 
 
