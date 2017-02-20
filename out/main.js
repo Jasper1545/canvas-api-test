@@ -33,24 +33,18 @@ window.onload = function () {
     name3.color = "#000000";
     name3.size = 100;
     name3.alpha = 0.1;
-    /*
-        var shape = new Shape();
-        shape.graphics.beginFill("#000000");
-    
-        shape.graphics.moveTo(200,200);
-        shape.graphics.lineTo(100,100);
-        shape.graphics.lineTo(0,200);
-    
-        shape.graphics.drawCircle(30,30,30);
-        shape.graphics.drawRect(50,50,100,50);
-    
-        shape.graphics.moveTo(0,0);
-        shape.graphics.lineTo(100,100);
-        shape.graphics.lineTo(200,0);
-    
-        shape.graphics.endFill();
-        shape.scaleX = 0.5;
-    */
+    var shape = new Shape();
+    shape.graphics.beginFill("#000000");
+    shape.graphics.moveTo(200, 200);
+    shape.graphics.lineTo(100, 100);
+    shape.graphics.lineTo(0, 200);
+    shape.graphics.drawCircle(30, 30, 30);
+    shape.graphics.drawRect(50, 50, 100, 50);
+    shape.graphics.moveTo(0, 0);
+    shape.graphics.lineTo(100, 100);
+    shape.graphics.lineTo(200, 0);
+    shape.graphics.endFill();
+    shape.scaleX = 0.5;
     //图片
     var image = document.createElement("img");
     image.src = "avater.jpg";
@@ -71,8 +65,8 @@ window.onload = function () {
         stage.addChild(name2);
         stage.addChild(name3);
         stage.removeChild(name2);
-        //shape.y = 100;
-        //stage.addChild(shape);
+        shape.y = 100;
+        stage.addChild(shape);
     };
 };
 var DisplayObject = (function () {
@@ -200,152 +194,110 @@ var TextField = (function (_super) {
     };
     return TextField;
 }(DisplayObject));
-/*
-class Shape extends DisplayObject {
-
-    graphics = new Graphics();
-    
-    public constructor() {
-        super();
+var Shape = (function (_super) {
+    __extends(Shape, _super);
+    function Shape() {
+        _super.call(this);
+        this.graphics = new Graphics();
     }
-
-    render(context2D:CanvasRenderingContext2D) {
-        
-        for(let info of this.graphics.shapeInfo){
+    Shape.prototype.render = function (context2D) {
+        for (var _i = 0, _a = this.graphics.shapeInfo; _i < _a.length; _i++) {
+            var info = _a[_i];
             context2D.fillStyle = this.graphics.color;
             context2D.globalAlpha = info.alpha;
-
-            switch(info.type) {
-
+            switch (info.type) {
                 case ShapeType.LINE:
-                    context2D.moveTo(info.x,info.y);
-                    context2D.lineTo(info.endx,info.endy);
+                    context2D.moveTo(info.x, info.y);
+                    context2D.lineTo(info.endx, info.endy);
                     context2D.stroke();
                     break;
-
                 case ShapeType.RECT:
-                    context2D.fillRect(info.x,info.y,info.width,info.height);
+                    context2D.fillRect(info.x, info.y, info.width, info.height);
                     break;
-                
                 case ShapeType.CIRCLE:
                     context2D.beginPath();
-                    context2D.arc(info.x,info.y,info.radius,0,Math.PI*2,true);
+                    context2D.arc(info.x, info.y, info.radius, 0, Math.PI * 2, true);
                     context2D.closePath();
                     context2D.fill();
                     break;
-
             }
         }
-        
-        
-    }
-
-    
-
-}
-
+    };
+    return Shape;
+}(DisplayObject));
 var ShapeType = {
-
-    LINE:0,
-    RECT:1,
-    CIRCLE:2
- 
-}
-
-class Graphics {
-
-    _x:number;
-    _y:number;
-
-    color:string = "";
-    shapeInfo:ShapeInfo[] = [];
-
-    public beginFill(color:string) {
+    LINE: 0,
+    RECT: 1,
+    CIRCLE: 2
+};
+var Graphics = (function () {
+    function Graphics() {
+        this.color = "";
+        this.shapeInfo = [];
+    }
+    Graphics.prototype.beginFill = function (color) {
         this.color = color;
-    }
-
-    public endFill() {
-
-    }
-
-    public drawCircle(x:number,y:number,radius:number) {
-
-        this.shapeInfo.push(new CircleInfo(x,y,radius));
-    }
-
-    public drawRect(x:number,y:number,width:number,height:number) {
-
-        this.shapeInfo.push(new RectInfo(x,y,width,height));
-    }
-
-    public lineTo(x:number,y:number) {
-        this.shapeInfo.push(new LineInfo(this._x,this._y,x,y));
+    };
+    Graphics.prototype.endFill = function () {
+    };
+    Graphics.prototype.drawCircle = function (x, y, radius) {
+        this.shapeInfo.push(new CircleInfo(x, y, radius));
+    };
+    Graphics.prototype.drawRect = function (x, y, width, height) {
+        this.shapeInfo.push(new RectInfo(x, y, width, height));
+    };
+    Graphics.prototype.lineTo = function (x, y) {
+        this.shapeInfo.push(new LineInfo(this._x, this._y, x, y));
         this._x = x;
         this._y = y;
-    }
-
-    public moveTo(x:number,y:number) {
+    };
+    Graphics.prototype.moveTo = function (x, y) {
         this._x = x;
         this._y = y;
+    };
+    return Graphics;
+}());
+var ShapeInfo = (function () {
+    function ShapeInfo() {
+        this.alpha = 1;
     }
-
-
-}
-
-class ShapeInfo {
-    type:number;
-    x:number;
-    y:number;
-    alpha:number = 1;
-    
-    radius:number;
-    width:number;
-    height:number;
-       
-    endx:number;
-    endy:number;
-}
-
-class CircleInfo extends ShapeInfo {
-    type = ShapeType.CIRCLE;
-
-    public constructor(x:number,y:number,radius:number) {
-        super();
+    return ShapeInfo;
+}());
+var CircleInfo = (function (_super) {
+    __extends(CircleInfo, _super);
+    function CircleInfo(x, y, radius) {
+        _super.call(this);
+        this.type = ShapeType.CIRCLE;
         this.x = x;
         this.y = y;
         this.radius = radius;
     }
-
-}
-
-class RectInfo extends ShapeInfo {
-    type = ShapeType.RECT;
-
-    public constructor(x:number,y:number,width:number,height:number) {
-        super();
+    return CircleInfo;
+}(ShapeInfo));
+var RectInfo = (function (_super) {
+    __extends(RectInfo, _super);
+    function RectInfo(x, y, width, height) {
+        _super.call(this);
+        this.type = ShapeType.RECT;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
     }
-
-
-}
-
-class LineInfo extends ShapeInfo {
-    type = ShapeType.LINE;
-
-    public constructor(_x:number,_y:number,x:number,y:number) {
-        super();
+    return RectInfo;
+}(ShapeInfo));
+var LineInfo = (function (_super) {
+    __extends(LineInfo, _super);
+    function LineInfo(_x, _y, x, y) {
+        _super.call(this);
+        this.type = ShapeType.LINE;
         this.x = _x;
         this.y = _y;
         this.endx = x;
         this.endy = y;
-      
     }
- 
-}
-*/
+    return LineInfo;
+}(ShapeInfo));
 var math;
 (function (math) {
     var Point = (function () {

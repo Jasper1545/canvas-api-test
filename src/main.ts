@@ -40,7 +40,7 @@ window.onload = () => {
     name3.alpha = 0.1;
 
 
-/*
+
     var shape = new Shape();
     shape.graphics.beginFill("#000000");
 
@@ -57,7 +57,7 @@ window.onload = () => {
 
     shape.graphics.endFill();
     shape.scaleX = 0.5;
-*/
+
 
     
     
@@ -85,9 +85,9 @@ window.onload = () => {
         stage.addChild(name3);
         
         stage.removeChild(name2);
-        //shape.y = 100;
+        shape.y = 100;
         
-        //stage.addChild(shape);
+        stage.addChild(shape);
 
     }
 
@@ -261,7 +261,7 @@ class TextField extends DisplayObject {
 
 }
 
-/*
+
 class Shape extends DisplayObject {
 
     graphics = new Graphics();
@@ -406,7 +406,7 @@ class LineInfo extends ShapeInfo {
     }
  
 }
-*/
+
 
 module math {
 
